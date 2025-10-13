@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estacionamento</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 { color: #333; }
+    .vaga {
+      display: inline-block;
+      width: 150px;
+      height: 150px;
+      margin: 10px;
+      border-radius: 10px;
+      color: white;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .livre { background-color: #4caf50; }
+    .ocupada { background-color: #f44336; }
+  </style>
+</head>
+<body>
+  <h1>Vagas de Estacionamento</h1>
+  <div id="vagasContainer"></div>
+
+  <button id="logout">Sair</button>
+
+  <script type="module" src="backend/home.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "name": "app-estacionamento",
+  "version": "1.0.0",
+  "description": "",
+  "main": "hellow-world.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VitorSilva06/App-Estacionamento.git"
+  },
+  "keywords": [],
+  "author": "Vitor",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VitorSilva06/App-Estacionamento/issues"
+  },
+  "homepage": "https://github.com/VitorSilva06/App-Estacionamento#readme",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "firebase": "^12.4.0",
+    "firebase-admin": "^13.5.0"
+  }
+}
