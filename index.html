@@ -6,7 +6,7 @@
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#4CAF50" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style/home.css">
+  <link rel="stylesheet" href="public/style/home.css">
   <link rel="manifest" href="manifest.json">
   <title>Estacionamento</title>
 </head>
@@ -17,7 +17,7 @@
   <button id="logout">Sair</button>
 
   <div id="alertContainer"></div>
-  <script type="module" src="backend/home.js"></script>
+  <script type="module" src="public/backend/home.js"></script>
   <script>
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker
@@ -26,6 +26,7 @@
         .catch((err) => console.error("Erro ao registrar Service Worker:", err));
     }
   </script>
+  <script src="server.js"></script>
 
 </body>
 
