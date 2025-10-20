@@ -1,8 +1,18 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+import {
+  getFirestore,
+  collection,
+  onSnapshot,
+  setDoc,
+  doc,
+} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut,
+} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 
-// Config Firebase
+// Configuração Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyATsq3CR2HNLNNwcCGL61F-kP-M7lT_owk",
   authDomain: "estacionamento-89fbe.firebaseapp.com",
@@ -14,55 +24,87 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 
 const vagasContainer = document.getElementById("vagasContainer");
+const logoutBtn = document.getElementById("logout");
 
-// Cria visual das 5 vagas
-function renderVagas(vagasData, userEmail) {
+// Função de alertas customizados
+function showAlert(message, type = "success") {
+  const container = document.getElementById("alertContainer");
+  if (!container) return;
+
+  const div = document.createElement("div");
+  div.className = `alert alert-${type}`;
+  div.textContent = message;
+  container.appendChild(div);
+
+  setTimeout(() => div.remove(), 3500);
+}
+
+// Logout
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", () => {
+    signOut(auth).then(() => (window.location.href = "login.html"));
+  });
+}
+
+// Renderiza as vagas
+function renderVagas(vagas, userEmail) {
   vagasContainer.innerHTML = "";
-  for (let i = 1; i <= 5; i++) {
-    const vaga = vagasData[`vaga${i}`] || { status: "livre", usuario: "" };
+
+  vagas.forEach((vaga) => {
+    const data = vaga.data();
+    const vagaId = vaga.id;
+
+    const status = data.status?.trim().toLowerCase() || "livre";
 
     const div = document.createElement("div");
-    div.classList.add("vaga", vaga.status === "livre" ? "livre" : "ocupada");
-    div.textContent = `Vaga ${i}\n${vaga.status === "livre" ? "🟢 Livre" : "🔴 Em uso"}`;
-    div.style.whiteSpace = "pre-line";
+    div.classList.add("vaga");
+    div.classList.add(status === "livre" ? "livre" : "ocupada");
+
+    div.innerHTML = `
+      <strong>${vagaId.toUpperCase()}</strong><br>
+      ${status === "livre" ? "🟢 Livre" : "🔴 Ocupada"}<br>
+      ${
+        data.usuario
+          ? `<small>Reservada por: <span>${data.usuario}</span></small>`
+          : "<small>Sem reserva</small>"
+      }
+    `;
 
     div.addEventListener("click", async () => {
-      if (vaga.status === "livre") {
-        // Ocupa a vaga
-        await setDoc(doc(db, "vagas", `vaga${i}`), {
+      const vagaRef = doc(db, "vagas", vagaId);
+
+      if (status === "livre") {
+        // Reservar vaga
+        await setDoc(vagaRef, {
           status: "ocupada",
           usuario: userEmail,
         });
-      } else if (vaga.usuario === userEmail) {
-        // Libera a vaga
-        await setDoc(doc(db, "vagas", `vaga${i}`), {
+        showAlert(`✅ Você reservou a vaga ${vagaId.toUpperCase()}`, "success");
+      } else if (data.usuario === userEmail) {
+        // Liberar vaga automaticamente
+        await setDoc(vagaRef, {
           status: "livre",
           usuario: "",
         });
+        showAlert(`⚪ Você liberou a vaga ${vagaId.toUpperCase()}`, "success");
       } else {
-        alert("❌ Essa vaga está sendo usada por outro usuário!");
+        showAlert("❌ Essa vaga já está reservada por outro usuário!", "error");
       }
     });
 
     vagasContainer.appendChild(div);
-  }
+  });
 }
 
-// Verifica login
+// Verifica login e escuta em tempo real
 onAuthStateChanged(auth, (user) => {
   if (!user) {
     window.location.href = "login.html";
     return;
   }
 
-  // Atualiza as vagas em tempo real
-  const unsub = onSnapshot(doc(db, "estado", "vagas"), (snapshot) => {
-    const vagasData = snapshot.exists() ? snapshot.data() : {};
-    renderVagas(vagasData, user.email);
+  const vagasRef = collection(db, "vagas");
+  onSnapshot(vagasRef, (snapshot) => {
+    renderVagas(snapshot.docs, user.email);
   });
-});
-
-// Logout
-document.getElementById("logout").addEventListener("click", () => {
-  signOut(auth).then(() => (window.location.href = "login.html"));
 });

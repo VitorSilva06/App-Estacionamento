@@ -1,0 +1,250 @@
+/* ================= Reset básico ================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ================= Body ================= */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #121212, #1e1e1e);
+  min-height: 100vh;
+  padding: 20px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: background 0.5s, color 0.5s;
+}
+
+/* ================= Título ================= */
+h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  color: #fff;
+}
+
+/* ================= Container de vagas ================= */
+#vagasContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 900px;
+}
+
+/* ================= Vaga individual ================= */
+.vaga {
+  background: linear-gradient(145deg, #1f1f1f, #2c2c2c);
+  border-radius: 15px;
+  padding: 18px 12px;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+}
+
+.vaga:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(76, 175, 80, 0.7);
+  background: linear-gradient(145deg, #272727, #3a3a3a);
+}
+
+/* ================= Status da vaga com glow ================= */
+.livre {
+  border: 2px solid #4caf50;
+}
+
+.livre::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #4caf50;
+  box-shadow: 0 0 8px #4caf50;
+}
+
+.ocupada {
+  border: 2px solid #e53935;
+}
+
+.ocupada::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #e53935;
+  box-shadow: 0 0 8px #e53935;
+}
+
+/* ================= Usuário da vaga ================= */
+.vaga small {
+  display: block;
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: #ccc;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.vaga small span {
+  color: #4caf50;
+  font-weight: 600;
+}
+
+/* ================= Botão logout ================= */
+#logout {
+  display: block;
+  margin: 30px auto 0 auto;
+  padding: 12px 25px;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+}
+
+#logout:hover {
+  background-color: #43a047;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(76, 175, 80, 0.7);
+}
+
+/* ================= Alerts flutuantes ================= */
+#alertContainer {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  width: 90%;
+  max-width: 400px;
+}
+
+.alert {
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: showAlert 0.5s forwards, hideAlert 0.5s 3s forwards;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.alert-success {
+  background-color: #4caf50;
+}
+
+.alert-error {
+  background-color: #e53935;
+}
+
+@keyframes showAlert {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hideAlert {
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+/* ================= Responsividade ================= */
+@media (max-width: 480px) {
+  #vagasContainer {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+  }
+
+  .vaga {
+    padding: 14px 10px;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+  }
+
+  #logout {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  .vaga small {
+    font-size: 0.8rem;
+  }
+
+  .alert {
+    font-size: 0.85rem;
+    padding: 12px 15px;
+  }
+}
+
+/* ================= Light mode automático ================= */
+@media (prefers-color-scheme: light) {
+  body {
+    background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+    color: #111;
+  }
+
+  .vaga {
+    background: linear-gradient(145deg, #fff, #f0f0f0);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .vaga small {
+    color: #555;
+  }
+
+  .livre {
+    border: 2px solid #4caf50;
+  }
+
+  .livre::before {
+    box-shadow: 0 0 6px #4caf50;
+  }
+
+  .ocupada {
+    border: 2px solid #e53935;
+  }
+
+  .ocupada::before {
+    box-shadow: 0 0 6px #e53935;
+  }
+
+  #logout {
+    background-color: #4caf50;
+    color: #fff;
+  }
+
+  .alert-success {
+    background-color: #4caf50;
+    color: #fff;
+  }
+
+  .alert-error {
+    background-color: #e53935;
+    color: #fff;
+  }
+}
