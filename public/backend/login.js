@@ -42,7 +42,7 @@ document.getElementById("loginForm").addEventListener("submit", (e) => {
         .then(() => {
             showAlert("Login realizado!", "success");
             setTimeout(() => {
-                window.location.href = "index.html";
+                window.location.href = "../index.html";
             }, 1000);
         })
         .catch((err) => {
